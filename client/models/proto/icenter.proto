@@ -1,0 +1,125 @@
+syntax = "proto3";
+
+package proto;
+
+//import "any.proto";
+
+option go_package = "proto";
+
+service HardwareInfo{
+    rpc GetHardwareInfo (HardwareRequest) returns (HardwareResponse) {}
+}
+
+message HardwareRequest {
+    string name = 1;
+}
+
+message CPU {
+	int32 Core = 2;
+	int32 Threads = 3;
+	int64 Cache = 4;
+    int64 Speed= 5;
+	int32 CPU= 6;
+	string Model= 7;
+	string Vendor= 8;
+}
+
+message GPU {
+    string  DriverVersion =1;
+    repeated GPUXML GPUs =2;
+}
+
+message Kernel {
+    string OSRelease = 1;
+    string OSType = 2;
+    string Version = 3;
+}
+
+message Memory {
+    int32 MemTotal = 1;
+    int32 MemFree = 2;
+    int32 SwapTotal = 3;
+    int32 SwapFree = 4;
+}
+
+message Network {
+    string Name = 1;
+    string IP = 2;
+    string MACAddress = 3;
+}
+
+message OS {
+    string Name = 1;
+    string Version = 2;
+    string CodeName = 3;
+}
+
+message Storage {
+    string FileSystem = 1;
+    string Mount = 2;
+    int64 Total = 3;
+    int64 Used = 4;
+    int64 Free = 5;
+}
+
+message StorageArray {
+    repeated Storage Storages = 1;
+}
+
+// GPUXML GPU info of a certain GPU
+message GPUXML {
+    string ProductName =1;
+    string FanSpeed = 2;
+    FBMemoryInfo FBMemory = 3;
+    TemperatureInfo Temperature = 4;
+    ClocksInfo Clocks =5;
+}
+
+//ClocksInfo contains current frequency at which parts of the GPU are running.
+message ClocksInfo {
+    string GraphicsClock = 1;
+    string SMClock = 2;
+    string MEMClock = 3;
+    string VideoClock = 4;
+}
+
+// FBMemoryInfo contains on-board frame buffer memory information.
+message FBMemoryInfo {
+    string Total = 1;
+    string Used = 2;
+    string Free = 3;
+}
+
+//TemperatureInfo contains readings from temperature sensors on the board.
+message TemperatureInfo {
+    string GPUTemperature =1;
+    string MemoryTemperature =2;
+}
+
+message HardwareResponse {
+    // string message = 1;
+    OS OSInfo = 1;
+    CPU CPUInfo = 2;
+    GPU GPUInfos = 3;
+    Kernel KernelInfo = 4;
+    Memory MemoryInfo = 5;
+    repeated Network NetworkInfos = 6;
+    map<string, StorageArray> StorageInfo = 7;
+//    Any StorageInfo = 7;
+}
+
+// The service definition.
+service ToUpper{
+    // Sends a greeting
+    rpc Upper (UpperRequest) returns (UpperReply) {}
+  }
+  
+// The request message
+message UpperRequest {
+    string name = 1;
+}
+  
+// The response message
+message UpperReply {
+    string message = 1;
+}
